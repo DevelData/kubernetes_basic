@@ -1,0 +1,64 @@
+# Deployment and Service in 1 file
+# Because they belong together
+# Deployment
+# Basic template for any application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  # how many replicas to create with the defined specification.
+  replicas: 1
+  selector:
+    matchLabels:
+      # This labels matches this deployment
+      app: webapp
+  # Configuration for pod within Deployment
+  template:
+    metadata:
+      labels:
+        app: webapp
+    # Definition of containers
+    spec:
+      containers:
+      - name: webapp   #name of container
+        image: nanajanashia/k8s-demo-app:v1.0  # image for pod
+        ports:
+        - containerPort: 3000
+        # Variable names defined in docker image
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              # From mongo-secret.yaml 
+              name: mongo-secret
+              key: mongo-user
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-user
+              key: mongo-password
+        - name: DB_URL  # Connection to database
+          valueFrom:
+            configMapKeyRef: 
+              name: mongo-config
+              key: mongo-url
+        # Upper limits for resources - should be specified ideally
+        #limits:
+        #  memory: "900Mi"
+        #  cpu: "1000m"
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  selector:
+    app: webapp  # Same label selector that was stated in deployment (spec.template.labels.app)
+  ports:
+    - protocol: TCP
+      port: 3000  # Any port that we want - sets the port of the service (common standard to select same value as targetPort)
+      targetPort: 3000   # Should be the same as containerPort - where the service request should be forwarded to
