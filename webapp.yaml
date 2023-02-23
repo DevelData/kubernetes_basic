@@ -31,14 +31,14 @@ spec:
         env:
         - name: USER_NAME
           valueFrom:
-            secretKeyRef:
-              # From mongo-secret.yaml 
+          # From mongo-secret.yaml
+            secretKeyRef: 
               name: mongo-secret
               key: mongo-user
         - name: USER_PWD
           valueFrom:
             secretKeyRef:
-              name: mongo-user
+              name: mongo-secret
               key: mongo-password
         - name: DB_URL  # Connection to database
           valueFrom:
