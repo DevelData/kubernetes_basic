@@ -1,0 +1,32 @@
+# Deployment and Service in 1 file
+# Because they belong together
+# Deployment
+apiVersion: apps/v1
+kind: Deployment  # If this db example were to be scaled (replica > 1), use StatefulSet
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1   # how many replicas to create with the defined specification.
+  selector:
+    matchLabels:
+      app: mongo  # This labels matches this deployment
+  # Configuration for pod within Deployment
+  template:
+    metadata:
+      labels:
+        app: mongo
+    # Definition of containers
+    spec:
+      containers:
+      - name: mongodb   #name of container
+        image: mongo:5.0  # image for pod
+        ports:
+        - containerPort: 27017
+        # Upper limits for resources - should be specified ideally
+        #limits:
+        #  memory: "900Mi"
+        #  cpu: "1000m"
+---
+# Service
