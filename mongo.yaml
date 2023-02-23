@@ -26,6 +26,17 @@ spec:
         image: mongo:5.0  # image for pod
         ports:
         - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME  # from mongodb docker documentation
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: MONGO_INITDB_ROOT_PASSWORD  # from mongodb docker documentation
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
         # Upper limits for resources - should be specified ideally
         #limits:
         #  memory: "900Mi"
