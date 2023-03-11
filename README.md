@@ -31,10 +31,10 @@ minikube status
 The output of the command above should match the following output:
 ```
 type: Control Plane
-host: Stopped
-kubelet: Stopped
-apiserver: Stopped
-kubeconfig: Stopped
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
 ```
 
 The tutorial will be completed with the aid of kubernetes-cli (kubectl), which is automatically downloaded when installing minikube. Kubernetes CLI (kubectl) is used to configure the minikube cluster, whereas the minikube CLI is used to start up, shut down and deleting the cluster.
